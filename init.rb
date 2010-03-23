@@ -3,6 +3,7 @@ require 'redmine'
 require 'dispatcher'
 Dispatcher.to_prepare :redmine_require_issue_deliverable do
   require_dependency 'issue'
+  Issue.send(:include, RedmineRequireIssueDeliverable::Patches::IssuePatch)
 end
 
 Redmine::Plugin.register :redmine_require_issue_deliverable do
@@ -13,4 +14,6 @@ Redmine::Plugin.register :redmine_require_issue_deliverable do
   description 'Require Issue Deliverable is a plugin to require setting the deliverable on an Issue.'
   version '0.1.0'
   requires_redmine :version_or_higher => '0.8.0'
+
+  requires_redmine_plugin :budget_plugin, :version_or_higher => '0.2.0' if respond_to?(:requires_redmine_plugin)
 end
